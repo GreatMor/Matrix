@@ -1,38 +1,65 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <vector>
 
 struct SMatrix
-{	
-	SMatrix(std::vector<std::vector<float>>& matrix/*, int n_size, int m_size*/);
-	SMatrix(std::vector<std::vector<float>>& matrix, float x1[4], float x2[4], float x3[4], float x4[4]);
-	SMatrix(std::vector<std::vector<float>>& matrix, const float x1[4], const float x2[4], const float x3[4]);
+{
+	//constructor
+	SMatrix(int Rows, int Cols);
+	SMatrix(float* arr[], int N, int M);
 
-	//Static functions 
-	static std::vector<std::vector<float>> GetIentityMatrix();
-	
+	//destructor
+	~SMatrix();
+
 	//functions 
-	std::vector<std::vector<float>> CreatDiagonalMatrix(float x1, float x2, float x3, float x4);
-	std::vector<std::vector<float>> CreateTriangularMatrix(float x1, float x2, float x3, float x4);
+	void PrintMatrix();
+	void CreateDiagonalMatrix();
+	void CreateTriangularMatrix();
+
+	bool IsUpperTriangularMatrix();
+	//Getters
+	float GetDet();
 
 private:
-
-	float matrix[4][4];		
+	int n = 4;
+	int m = 4;
+	// array pointers
+	float** Mmatrix = new float* [n];	
 };
 
 int main()
 {
-	float arr1[4]{ 1,2,3,2 };
-	float arr2[4]{ 0,0,0,3 };
-	float arr3[4]{ 41,42,43,4 };
-	float arr4[4]{ 41,42,43,5 };
+	int count = 1;
+	float** arr = new float* [3];
+	for (int i = 0; i < 3; i++)
+	{
+		arr[i] = new float[3];
+	}
 
-	std::vector<std::vector<float>> A = { {2,2}, {2,2} };
-	SMatrix matrix(A, 2,2);
-	
-	std::vector<std::vector<float>> B;
-	SMatrix matrix2(B, arr1, arr2, arr3, arr4);
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			arr[i][j] = count++;
+		}
+	}
+
+	SMatrix A(arr,3,3);
+	A.PrintMatrix();
+	std::cout << std::endl;
+
+	A.CreateTriangularMatrix();
+	A.PrintMatrix();
+	std::cout << std::endl;
+
+	//A.CreateDiagonalMatrix();	
+	//A.PrintMatrix();
+	//std::cout << std::endl;
+
+	float det = A.GetDet();
+	std::cout << det;
 	int a = 0;
+	std::cin >> a;
 	return 0;
 }
 
