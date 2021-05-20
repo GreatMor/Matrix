@@ -1,127 +1,121 @@
 ﻿#include "FMatrix.h"
 
-SMatrix::SMatrix(int Rows, int Cols)
-{	
-	n = Rows;
-	m = Cols;
+SMatrix::SMatrix(int N, int M)
+	:Cols(N)
+	,Rows(M)
+	,Mmatrix(new float* [Cols])
+{
+	CreateMatrix();
 
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < Cols; ++i)
 	{
-		Mmatrix[i] = new float[m];
-	}
-
-	for (int i = 0; i < n; ++i)
-	{
-		for (int j = 0; j < m; ++j)
+		for (int j = 0; j < Rows; ++j)
 		{
 			Mmatrix[i][j] = 0;
 		}
 	}
 }
 
-SMatrix::SMatrix(float* arr[], int Rows, int Cols)
+SMatrix::SMatrix(float* arr, int N, int M)
+	:Cols(N)
+	, Rows(M)
+	,Mmatrix(new float* [Cols])
 {
-	n = Rows;
-	m = Cols;
-
-	for (int i = 0; i < n; i++)
-	{
-		Mmatrix[i] = new float[m];
-	}
-
-	for (int i = 0; i < Rows; ++i)
-	{
-		for (int j = 0; j < Cols; ++j)
+	CreateMatrix();
+	int count = 0;
+	for (int i = 0; i < Cols; ++i)
+	{	
+		for (int j = 0; j < Rows; ++j)
 		{
-			Mmatrix[i][j] = arr[i][j];
+			Mmatrix[i][j] = arr[count];
+			count++;
 		}
 	}
 }
 
-SMatrix::~SMatrix()
+SMatrix::SMatrix(SMatrix const& arr)
 {
-	for (int i = 0; i < m; ++i)
+	for (int i = 0; i < 4; i++)
 	{
-		delete[] Mmatrix[i];
+		for (int j = 0; j < 4; j++)
+		{
+			//Mmatrix[i][j] = arr.Mmatrix[i][j];
+		}
 	}
-	delete[] Mmatrix;
 }
 
-void SMatrix::PrintMatrix()
+void SMatrix::Multiply(SMatrix * arr)
 {
-	for (int i = 0; i < n; i++)
+	if (Cols == arr->Rows)
 	{
-		for (int j = 0; j < m; ++j)
+		for (int i = 0; i < Cols; i++)
 		{
-			std::cout << Mmatrix[i][j] << "  " << "\t";
+			for (int j = 0; j < arr->Rows; j++)
+			{
+				for (int k = 0; k < Rows; k++)
+				{
+					std::cout <<  Mmatrix[i][k] << "*" << arr->Mmatrix[k][j] << "\t" << std::endl;
+				}
+				
+			}
+		
+		}
+	}
+	
+}
+
+void SMatrix::PrintMatrix(const SMatrix& A)
+{
+	for (int i = 0; i < A.Cols; ++i)
+	{
+		for (int j = 0; j < A.Rows; ++j)
+		{
+			std::cout << A.Mmatrix[i][j] << "  " << "\t";
 		}
 		std::cout << std::endl;
 	}
+
+	std::cout << std::endl;
 }
 
-
-void SMatrix::CreateDiagonalMatrix()
+void SMatrix::CreateMatrix()
 {
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < Cols; i++)
 	{
-		for (int j = 0; j < m; j++)
-		{
-			if (i == j)
-				Mmatrix[i][j] = Mmatrix[i][j];
-			else
-				Mmatrix[i][j] = 0;
-		}
+		Mmatrix[i] = new float[Rows];
 	}
 }
 
-void SMatrix::CreateTriangularMatrix()
+SMatrix* SMatrix::operator*(const SMatrix& mat)
 {
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
+	SMatrix* Mmatr();
+	if (Cols == mat.Rows)
+	{		
+		for (int i = 0; i < Cols; i++)
 		{
-			if (i == j || i < j)
-				Mmatrix[i][j] = Mmatrix[i][j];
-			else
-				Mmatrix[i][j] = 0;
-		}
-	}
-}
-
-bool SMatrix::IsUpperTriangularMatrix()
-{
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			if (i > j)
+			for (int j = 0; j < mat.Rows; j++)
 			{
-				if(Mmatrix[i][j] != 0)				
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-float SMatrix::GetDet()
-{
-	float Det = 1;
-	float CurrentValue = 1;
-	if (IsUpperTriangularMatrix())
-	{
-		for (int i = 0; i < n; i++)
-		{
-			for (int j = 0; j < m; j++)
-			{
-				if (i == j)
+				for (int k = 0; k < Rows; k++)
 				{
-					Det *= Mmatrix[i][j];
+					Mmatr.Mmatrix[i][k] += Mmatrix[i][k] * mat.Mmatrix[k][j];
+					//std::cout << Mmatrix[i][k] << "*" << mat.Mmatrix[k][j] << "\t" << std::endl;
 				}
 			}
 		}
-		return Det;
 	}
-	else
-		return 0;
+	return Mmatr;
 }
+
+//
+//void SMatrix::PrintMatrix()
+//{
+//	for (int i = 0; i < 4; i++)
+//	{
+//		for (int j = 0; j < 4; ++j)
+//		{
+//			std::cout << Mmatrix[i][j] << "  " << "\t";
+//		}
+//		std::cout << std::endl;
+//	}
+//}
+
