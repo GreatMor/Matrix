@@ -4,7 +4,7 @@
 struct SMatrix
 {
 	//constructor
-	SMatrix();
+	SMatrix(int N, int M, bool test);
 	SMatrix(int N, int M);
 	SMatrix(float* arr, int N, int M);
 	SMatrix(SMatrix const& arr);
@@ -25,17 +25,39 @@ struct SMatrix
 	SMatrix operator+ (const SMatrix& InMat);
 	SMatrix operator- (const SMatrix& InMat);
 
-protected:	
 	int Cols, Rows;
-	float** Mmatrix;	
+	float* Matr;
+protected:	
+	
+	float** Matrix;
+	
 private:
 	void ClearMatrix();
 };
 
-int main()
+
+void printM(const SMatrix& m)
 {
-	return 0;
+	for (int i = 1; i < m.Cols * m.Rows + 1; i++)
+	{
+
+		std::cout << m.Matr[i - 1];
+		if (i % (m.Cols) == 0)
+			std::cout << std::endl;
+
+	}
+
 }
 
+int main()
+{
+	SMatrix OneMat(2,3, true);
+	SMatrix TwoMat(2, 3, true);
+	
+	printM(OneMat);
+	std::cout<<std::endl;
+	printM(TwoMat);
 
-
+	int a = 0;
+	return 0;
+}

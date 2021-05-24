@@ -1,24 +1,21 @@
 ﻿#include "FMatrix.h"
 
-SMatrix::SMatrix()
-	:Cols(4)
-	,Rows(4)
-	,Mmatrix(new float* [Cols])
+SMatrix::SMatrix(int N, int M, bool test)
+	:Cols(N)
+	,Rows(M)
+	,Matr(new float [Cols*Rows])
 {
-	CreateMatrix(Cols, Rows);
+	//CreateMatrix(Cols, Rows);
 
-	for (int i = 0; i < Cols; ++i)
+	for (int i = 0; i < Cols * Rows; ++i)
 	{
-		for (int j = 0; j < Rows; ++j)
-		{
-			Mmatrix[i][j] = 0;
-		}
+		Matr[i] = i;
 	}
 }
 SMatrix::SMatrix(int N, int M)
 	:Cols(N)
 	,Rows(M)
-	,Mmatrix(new float* [Cols])
+	,Matrix(new float* [Cols])
 {
 	CreateMatrix(Cols, Rows);
 
@@ -26,7 +23,7 @@ SMatrix::SMatrix(int N, int M)
 	{
 		for (int j = 0; j < Rows; ++j)
 		{
-			Mmatrix[i][j] = 0;
+			Matrix[i][j] = 0;
 		}
 	}
 }
@@ -34,7 +31,7 @@ SMatrix::SMatrix(int N, int M)
 SMatrix::SMatrix(float* arr, int N, int M)
 	:Cols(N)
 	,Rows(M)
-	,Mmatrix(new float* [Cols])
+	,Matrix(new float* [Cols])
 {
 	CreateMatrix(Cols, Rows);
 	int count = 0;
@@ -42,7 +39,7 @@ SMatrix::SMatrix(float* arr, int N, int M)
 	{	
 		for (int j = 0; j < Rows; ++j)
 		{
-			Mmatrix[i][j] = arr[count];
+			Matrix[i][j] = arr[count];
 			count++;
 		}
 	}
@@ -51,14 +48,14 @@ SMatrix::SMatrix(float* arr, int N, int M)
 SMatrix::SMatrix(SMatrix const& arr)
 	:Cols(arr.Cols)
 	,Rows(arr.Rows)
-	,Mmatrix(new float* [Cols])
+	,Matrix(new float* [Cols])
 {
 	CreateMatrix(arr.Cols, arr.Rows);
 	for (int i = 0; i < arr.Cols; i++)
 	{
 		for (int j = 0; j < arr.Rows; j++)
 		{
-			Mmatrix[i][j] = arr.Mmatrix[i][j];
+			Matrix[i][j] = arr.Matrix[i][j];
 		}
 	}
 }
@@ -68,10 +65,10 @@ SMatrix::SMatrix(SMatrix const& arr)
 //{
 //	for (int i = 0; i < this->Rows; i++)
 //	{
-//		delete[] Mmatrix[i];
+//		delete[] Matrix[i];
 //	}
 //
-//	delete[] Mmatrix;	
+//	delete[] Matrix;	
 //}
 
 void SMatrix::Multiply(SMatrix* InMat)
@@ -86,13 +83,13 @@ void SMatrix::Multiply(SMatrix* InMat)
 			{
 				for (int k = 0; k < Rows; k++)
 				{
-					Mmatr.Mmatrix[i][j] += Mmatrix[i][k] * InMat->Mmatrix[k][j];
+					Mmatr.Matrix[i][j] += Matrix[i][k] * InMat->Matrix[k][j];
 				}
 			}
 		}
 		
 	}
-	Mmatrix = Mmatr.Mmatrix;
+	Matrix = Mmatr.Matrix;
 
 }
 
@@ -103,8 +100,8 @@ SMatrix SMatrix::Transpose()
 	{
 		for (int j = 0; j < this->Rows; j++)
 		{
-			TempMat.Mmatrix[j][i] = this->Mmatrix[i][j];
-			std::cout << "TempMat.Mmatrix[j][i] =" << TempMat.Mmatrix[j][i] << std::endl;
+			TempMat.Matrix[j][i] = this->Matrix[i][j];
+			std::cout << "TempMat.Matrix[j][i] =" << TempMat.Matrix[j][i] << std::endl;
 		}
 	}
 	return TempMat;
@@ -116,7 +113,7 @@ void SMatrix::PrintMatrix(const SMatrix& A)
 	{
 		for (int j = 0; j < A.Rows; ++j)
 		{
-			std::cout << A.Mmatrix[i][j] << "  " << "\t";
+			std::cout << A.Matrix[i][j] << "  " << "\t";
 		}
 		std::cout << std::endl;
 	}
@@ -128,7 +125,7 @@ void SMatrix::CreateMatrix(int Cols, int Rows)
 {
 	for (int i = 0; i < Cols; i++)
 	{
-		Mmatrix[i] = new float[Rows];
+		Matrix[i] = new float[Rows];
 	}
 }
 
@@ -143,9 +140,9 @@ SMatrix SMatrix::operator*(const SMatrix& mat)
 			{
 				for (int k = 0; k < Rows; k++)
 				{
-					Mmatr.Mmatrix[i][j] += Mmatrix[i][k] * mat.Mmatrix[k][j];
-					std::cout << "Mmatr.Mmatrix["<< i << "][" << k <<"]"
-						<< "*" << "mat.Mmatrix["<< k <<"]"<< "[" << j <<"]" << "\t" << std::endl;
+					Mmatr.Matrix[i][j] += Matrix[i][k] * mat.Matrix[k][j];
+					std::cout << "Mmatr.Matrix["<< i << "][" << k <<"]"
+						<< "*" << "mat.Matrix["<< k <<"]"<< "[" << j <<"]" << "\t" << std::endl;
 				}
 			}
 		}
@@ -161,7 +158,7 @@ SMatrix SMatrix::operator*(const float value)
 	{
 		for (int j = 0; j < Rows; j++)
 		{
-			Mmatr.Mmatrix[i][j] = value* Mmatrix[i][j];
+			Mmatr.Matrix[i][j] = value* Matrix[i][j];
 		}
 	}
 	
@@ -179,7 +176,7 @@ SMatrix SMatrix::operator+(const SMatrix& InMat)
 		{
 			for (int j = 0; j < Rows; j++)
 			{
-				OutMmatr.Mmatrix[i][j] = Mmatrix[i][j] + InMat.Mmatrix[i][j];
+				OutMmatr.Matrix[i][j] = Matrix[i][j] + InMat.Matrix[i][j];
 			}
 		}
 		return OutMmatr;
@@ -199,9 +196,9 @@ SMatrix SMatrix::operator-(const SMatrix& InMat)
 		{
 			for (int j = 0; j < Rows; j++)
 			{
-				OutMmatr.Mmatrix[i][j] = Mmatrix[i][j] - InMat.Mmatrix[i][j];
-				std::cout << "Mmatrix[" << i << "]["<< j<< "]" << Mmatrix[i][j]
-					<< "-" << "InMat.Mmatrix[" << i << "][" << j << "]" << InMat.Mmatrix[i][j] <<std::endl;
+				OutMmatr.Matrix[i][j] = Matrix[i][j] - InMat.Matrix[i][j];
+				std::cout << "Matrix[" << i << "]["<< j<< "]" << Matrix[i][j]
+					<< "-" << "InMat.Matrix[" << i << "][" << j << "]" << InMat.Matrix[i][j] <<std::endl;
 			}
 		}
 		return OutMmatr;
@@ -215,8 +212,8 @@ void SMatrix::ClearMatrix()
 {
 	
 		for (int j = 0; j < Rows-1; j++)
-			delete[] Mmatrix[j];
-	delete[] Mmatrix;
+			delete[] Matrix[j];
+	delete[] Matrix;
 }
 
 //
@@ -226,7 +223,7 @@ void SMatrix::ClearMatrix()
 //	{
 //		for (int j = 0; j < 4; ++j)
 //		{
-//			std::cout << Mmatrix[i][j] << "  " << "\t";
+//			std::cout << Matrix[i][j] << "  " << "\t";
 //		}
 //		std::cout << std::endl;
 //	}
