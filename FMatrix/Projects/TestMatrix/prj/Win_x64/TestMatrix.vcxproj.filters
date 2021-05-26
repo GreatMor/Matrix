@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Classes\Include">
+      <UniqueIdentifier>{E4747C19-BE05-11EB-9D8D-0008CAF3050A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Source">
+      <UniqueIdentifier>{E474F141-BE05-11EB-A653-0008CAF3050A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{E474F142-BE05-11EB-8207-0008CAF3050A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{E474F143-BE05-11EB-9450-0008CAF3050A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Classes\Include\FMatrix.h">
+      <Filter>Classes\Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Classes\Source\FMatrix.cpp">
+      <Filter>Classes\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Classes\Source.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Config\ConfigProject.json">
+      <Filter>Config</Filter>
+    </None>
+  </ItemGroup>
+</Project>
